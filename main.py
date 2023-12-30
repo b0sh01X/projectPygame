@@ -1,5 +1,6 @@
 import os
 import sys
+from typing import Any
 
 import pygame
 import random
@@ -42,10 +43,9 @@ class Oxotnik(pygame.sprite.Sprite):
         self.rect.y = 0
     
     def strel(self):
-        pulya = Pulya(pulya_gr)
         if self.photo == 'oxot-1.png':
             coord = (self.rect.x, self.rect.y + 28)
-            pulya.strel(coord)
+            Pulya(coord)
 
 
 class Fon(pygame.sprite.Sprite):
@@ -71,23 +71,17 @@ class Knopka(pygame.sprite.Sprite):
 
 
 class Pulya(pygame.sprite.Sprite):
-    def __init__(self, group):
-        super().__init__(group)
+    def __init__(self, coord):
+        super().__init__(pulya_gr)
         self.image = pygame.transform.scale(load_image('pulya.png'), (100, 100))
         self.rect = self.image.get_rect()
-        self.rect.x = 0
-        self.rect.y = 0
-
-    def strel(self, coord):
         self.rect.x = coord[0]
         self.rect.y = coord[1]
-        while self.rect.x > 0:
-            fon.draw(screen)
-            self.rect.x -= 10
-            pulya_gr.draw(screen)
-            pygame.display.flip()
-            pygame.time.Clock().tick(50)
-        self.rect.x = -100
+    
+    def update(self):
+        self.rect.x -= 10
+        if self.rect.x < 0:
+            self.kill()
 
 
 running = True
@@ -123,6 +117,8 @@ while running:
     if in_game:
         fon.draw(screen)
         group.draw(screen)
+        pulya_gr.draw(screen)
+        pulya_gr.update()
     pygame.display.flip()
     pygame.time.Clock().tick(50)
 pygame.quit()
