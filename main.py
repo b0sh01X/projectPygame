@@ -44,13 +44,13 @@ class Oxotnik(pygame.sprite.Sprite):
     
     def strel(self):
         if self.photo == 'oxot-1.png':
-            coord = (self.rect.x, self.rect.y + 28)
+            coord = (self.rect.x, self.rect.y + 75)
             Pulya(coord)
         if self.photo == 'oxot-2.png':
-            coord = (self.rect.x, self.rect.y + 39)
+            coord = (self.rect.x, self.rect.y + 75)
             Pulya(coord)
         if self.photo == 'oxot-3.png':
-            coord = (self.rect.x, self.rect.y + 35)
+            coord = (self.rect.x, self.rect.y + 65)
             Pulya(coord)
 
 
@@ -79,13 +79,13 @@ class Knopka(pygame.sprite.Sprite):
 class Pulya(pygame.sprite.Sprite):
     def __init__(self, coord):
         super().__init__(pulya_gr)
-        self.image = pygame.transform.scale(load_image('pulya.png'), (100, 100))
+        self.image = pygame.transform.scale(load_image('pulya.png'), (30, 30))
         self.rect = self.image.get_rect()
         self.rect.x = coord[0]
         self.rect.y = coord[1]
     
     def update(self):
-        self.rect.x -= 10
+        self.rect.x -= 5
         if self.rect.x < 0:
             self.kill()
 
@@ -96,6 +96,8 @@ fon = pygame.sprite.Group()
 zastav = pygame.sprite.Group()
 pulya_gr = pygame.sprite.Group()
 in_game = False
+verx = False
+vniz = False
 
 fon_game = Fon(fon, 1)
 zastavka = Fon(zastav, 2)
@@ -111,12 +113,17 @@ while running:
         if event.type == pygame.KEYDOWN:
             if in_game:
                 if event.key == pygame.K_UP:
-                    oxot.rect.y -= 10
+                    verx = True
                 if event.key == pygame.K_DOWN:
-                    oxot.rect.y += 10
+                    vniz = True
                 if event.key == pygame.K_SPACE:
                     oxot.strel()
-
+        if event.type == pygame.KEYUP:
+            if in_game:
+                if event.key == pygame.K_UP:
+                    verx = False
+                if event.key == pygame.K_DOWN:
+                    vniz = False
         if event.type == pygame.MOUSEBUTTONDOWN and kn.rect.collidepoint(event.pos):
             in_game = True
             screen.fill((0, 0, 0))
@@ -125,6 +132,10 @@ while running:
         group.draw(screen)
         pulya_gr.draw(screen)
         pulya_gr.update()
+        if verx:
+            oxot.rect.y -= 5
+        if vniz:
+            oxot.rect.y += 5
     pygame.display.flip()
     pygame.time.Clock().tick(50)
 pygame.quit()
