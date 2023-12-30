@@ -46,6 +46,12 @@ class Oxotnik(pygame.sprite.Sprite):
         if self.photo == 'oxot-1.png':
             coord = (self.rect.x, self.rect.y + 28)
             Pulya(coord)
+        if self.photo == 'oxot-2.png':
+            coord = (self.rect.x, self.rect.y + 39)
+            Pulya(coord)
+        if self.photo == 'oxot-3.png':
+            coord = (self.rect.x, self.rect.y + 35)
+            Pulya(coord)
 
 
 class Fon(pygame.sprite.Sprite):
