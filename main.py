@@ -1,6 +1,5 @@
 import os
 import sys
-from typing import Any
 
 import pygame
 import random
@@ -27,6 +26,13 @@ def load_image(name, colorkey=None):
     else:
         image = image.convert_alpha()
     return image
+
+
+def load_robot():
+    sp = [False, True]
+    r = random.choice(sp)
+    if r:
+        Robot()
 
 
 class Oxotnik(pygame.sprite.Sprite):
@@ -90,11 +96,36 @@ class Pulya(pygame.sprite.Sprite):
             self.kill()
 
 
+class Robot(pygame.sprite.Sprite):
+    def __init__(self):
+        super().__init__(rabot)
+        self.image = pygame.transform.scale(load_image('robot.png'), (200, 200))
+        self.rect = self.image.get_rect()
+        self.rect.x = -70
+        self.rect.y = random.randrange(-60, 600)
+    
+    def update(self, killall=False):
+        global in_game
+        global verx
+        global vniz
+        self.rect.x += 3
+        if killall:
+            self.kill
+        if self.rect.x > 900:
+            in_game = False
+            group.update(True)
+            self.kill()
+            vniz = False
+            verx = False
+
+
 running = True
+count = 0
 group = pygame.sprite.Group()
 fon = pygame.sprite.Group()
 zastav = pygame.sprite.Group()
 pulya_gr = pygame.sprite.Group()
+rabot = pygame.sprite.Group()
 in_game = False
 verx = False
 vniz = False
@@ -105,8 +136,8 @@ kn = Knopka(zastav)
 
 oxot = Oxotnik(group)
 zerk1 = False
-zastav.draw(screen)
 while running:
+    zastav.draw(screen)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -132,6 +163,13 @@ while running:
         group.draw(screen)
         pulya_gr.draw(screen)
         pulya_gr.update()
+        rabot.update()
+        rabot.draw(screen)
+        if count == 100:
+            load_robot()
+            count = 0
+        else:
+            count += 1
         if verx:
             oxot.rect.y -= 5
         if vniz:
