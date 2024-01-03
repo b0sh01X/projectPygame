@@ -11,6 +11,11 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Охота на роботов")
 
 
+def restart():
+    for i in all_sprites:
+        i.kill()
+
+
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
     # если файл не существует, то выходим
@@ -37,7 +42,7 @@ def load_robot():
 
 class Oxotnik(pygame.sprite.Sprite):
     def __init__(self, group):
-        super().__init__(group)
+        super().__init__(group, all_sprites)
         self.init()
     
     def init(self):
@@ -84,7 +89,7 @@ class Knopka(pygame.sprite.Sprite):
 
 class Pulya(pygame.sprite.Sprite):
     def __init__(self, coord):
-        super().__init__(pulya_gr)
+        super().__init__(pulya_gr, all_sprites)
         self.image = pygame.transform.scale(load_image('pulya.png'), (30, 30))
         self.rect = self.image.get_rect()
         self.rect.x = coord[0]
@@ -98,25 +103,23 @@ class Pulya(pygame.sprite.Sprite):
 
 class Robot(pygame.sprite.Sprite):
     def __init__(self):
-        super().__init__(rabot)
+        super().__init__(rabot, all_sprites)
         self.image = pygame.transform.scale(load_image('robot.png'), (200, 200))
         self.rect = self.image.get_rect()
         self.rect.x = -70
         self.rect.y = random.randrange(-60, 600)
     
-    def update(self, killall=False):
+    def update(self):
         global in_game
         global verx
         global vniz
         self.rect.x += 3
-        if killall:
-            self.kill
         if self.rect.x > 900:
             in_game = False
-            group.update(True)
             self.kill()
             vniz = False
             verx = False
+            restart()
 
 
 running = True
@@ -126,6 +129,7 @@ fon = pygame.sprite.Group()
 zastav = pygame.sprite.Group()
 pulya_gr = pygame.sprite.Group()
 rabot = pygame.sprite.Group()
+all_sprites = pygame.sprite.Group()
 in_game = False
 verx = False
 vniz = False
@@ -134,7 +138,6 @@ fon_game = Fon(fon, 1)
 zastavka = Fon(zastav, 2)
 kn = Knopka(zastav)
 
-oxot = Oxotnik(group)
 zerk1 = False
 while running:
     zastav.draw(screen)
@@ -158,6 +161,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and kn.rect.collidepoint(event.pos):
             in_game = True
             screen.fill((0, 0, 0))
+            oxot = Oxotnik(group)
     if in_game:
         fon.draw(screen)
         group.draw(screen)
