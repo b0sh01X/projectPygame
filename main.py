@@ -12,8 +12,10 @@ pygame.display.set_caption("Охота на роботов")
 
 
 def restart():
+    global kd_pulya
     for i in all_sprites:
         i.kill()
+    kd_pulya = 70
 
 
 def load_image(name, colorkey=None):
@@ -55,15 +57,18 @@ class Oxotnik(pygame.sprite.Sprite):
         self.rect.y = 0
     
     def strel(self):
-        if self.photo == 'oxot-1.png':
-            coord = (self.rect.x, self.rect.y + 75)
-            Pulya(coord)
-        if self.photo == 'oxot-2.png':
-            coord = (self.rect.x, self.rect.y + 75)
-            Pulya(coord)
-        if self.photo == 'oxot-3.png':
-            coord = (self.rect.x, self.rect.y + 65)
-            Pulya(coord)
+        global kd_pulya
+        if kd_pulya > 70:
+            kd_pulya = 0
+            if self.photo == 'oxot-1.png':
+                coord = (self.rect.x, self.rect.y + 75)
+                Pulya(coord)
+            if self.photo == 'oxot-2.png':
+                coord = (self.rect.x, self.rect.y + 75)
+                Pulya(coord)
+            if self.photo == 'oxot-3.png':
+                coord = (self.rect.x, self.rect.y + 65)
+                Pulya(coord)
 
 
 class Fon(pygame.sprite.Sprite):
@@ -95,11 +100,16 @@ class Pulya(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = coord[0]
         self.rect.y = coord[1]
+        self.mask = pygame.mask.from_surface(self.image)
     
     def update(self):
         self.rect.x -= 5
         if self.rect.x < 0:
             self.kill()
+        for r in rabot:
+            if pygame.sprite.collide_mask(self, r):
+                self.kill()
+                r.kill()
 
 
 class Robot(pygame.sprite.Sprite):
@@ -108,7 +118,7 @@ class Robot(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(load_image('robot.png'), (200, 200))
         self.rect = self.image.get_rect()
         self.rect.x = -70
-        self.rect.y = random.randrange(-60, 600)
+        self.rect.y = random.randrange(0, 470)
         self.mask = pygame.mask.from_surface(self.image)
     
     def update(self):
@@ -135,6 +145,7 @@ all_sprites = pygame.sprite.Group()
 in_game = False
 verx = False
 vniz = False
+kd_pulya = 70
 
 fon_game = Fon(fon, 1)
 zastavka = Fon(zastav, 2)
@@ -180,6 +191,7 @@ while running:
             oxot.rect.y -= 5
         if vniz:
             oxot.rect.y += 5
+        kd_pulya += 1
     pygame.display.flip()
     pygame.time.Clock().tick(50)
 pygame.quit()
