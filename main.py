@@ -11,11 +11,24 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Охота на роботов")
 
 
+def countt():
+    font = pygame.font.Font(None, 50)
+    text = font.render(str(count_kill), True, (255, 255, 255))
+    text_w = text.get_width()
+    text_h = text.get_height()
+    pygame.draw.rect(screen, (0, 0, 0), (0, 0, text_w + 30, 50))
+    screen.blit(text, (15, 10))
+
+
 def restart():
     global kd_pulya
+    global count
+    global count_kill
     for i in all_sprites:
         i.kill()
     kd_pulya = 70
+    count_kill = 0
+    count = 0
 
 
 def load_image(name, colorkey=None):
@@ -103,6 +116,7 @@ class Pulya(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.image)
     
     def update(self):
+        global count_kill
         self.rect.x -= 5
         if self.rect.x < 0:
             self.kill()
@@ -110,6 +124,7 @@ class Pulya(pygame.sprite.Sprite):
             if pygame.sprite.collide_mask(self, r):
                 self.kill()
                 r.kill()
+                count_kill += 1
 
 
 class Robot(pygame.sprite.Sprite):
@@ -136,6 +151,9 @@ class Robot(pygame.sprite.Sprite):
 
 running = True
 count = 0
+kd_pulya = 70
+count_kill = 0
+
 group = pygame.sprite.Group()
 fon = pygame.sprite.Group()
 zastav = pygame.sprite.Group()
@@ -145,13 +163,11 @@ all_sprites = pygame.sprite.Group()
 in_game = False
 verx = False
 vniz = False
-kd_pulya = 70
 
 fon_game = Fon(fon, 1)
 zastavka = Fon(zastav, 2)
 kn = Knopka(zastav)
 
-zerk1 = False
 while running:
     zastav.draw(screen)
     for event in pygame.event.get():
@@ -182,6 +198,7 @@ while running:
         pulya_gr.update()
         rabot.update()
         rabot.draw(screen)
+        countt()
         if count == 100:
             load_robot()
             count = 0
