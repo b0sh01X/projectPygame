@@ -44,6 +44,7 @@ class Oxotnik(pygame.sprite.Sprite):
     def __init__(self, group):
         super().__init__(group, all_sprites)
         self.init()
+        self.mask = pygame.mask.from_surface(self.image)
     
     def init(self):
         sp = ['oxot-1.png', 'oxot-2.png', 'oxot-3.png']
@@ -108,13 +109,14 @@ class Robot(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = -70
         self.rect.y = random.randrange(-60, 600)
+        self.mask = pygame.mask.from_surface(self.image)
     
     def update(self):
         global in_game
         global verx
         global vniz
         self.rect.x += 3
-        if self.rect.x > 900:
+        if self.rect.x > 900 or pygame.sprite.collide_mask(self, oxot):
             in_game = False
             self.kill()
             vniz = False
