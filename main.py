@@ -15,7 +15,6 @@ def countt():
     font = pygame.font.Font(None, 50)
     text = font.render(str(count_kill), True, (255, 255, 255))
     text_w = text.get_width()
-    text_h = text.get_height()
     pygame.draw.rect(screen, (0, 0, 0), (0, 0, text_w + 30, 50))
     screen.blit(text, (15, 10))
 
@@ -26,7 +25,7 @@ def restart():
     global count_kill
     for i in all_sprites:
         i.kill()
-    kd_pulya = 70
+    kd_pulya = 25
     count_kill = 0
     count = 0
 
@@ -71,7 +70,7 @@ class Oxotnik(pygame.sprite.Sprite):
     
     def strel(self):
         global kd_pulya
-        if kd_pulya > 70:
+        if kd_pulya > 25:
             kd_pulya = 0
             if self.photo == 'oxot-1.png':
                 coord = (self.rect.x, self.rect.y + 75)
@@ -152,7 +151,7 @@ class Robot(pygame.sprite.Sprite):
 
 running = True
 count = 0
-kd_pulya = 70
+kd_pulya = 25
 count_kill = 0
 
 icon = load_image('icon.png')
@@ -194,7 +193,8 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and kn.rect.collidepoint(event.pos):
             in_game = True
             screen.fill((0, 0, 0))
-            oxot = Oxotnik(group)
+            if not group:
+                oxot = Oxotnik(group)
     if in_game:
         fon.draw(screen)
         group.draw(screen)
@@ -203,7 +203,11 @@ while running:
         rabot.update()
         rabot.draw(screen)
         countt()
-        if count == 100:
+        if 100 - 10 * count_kill > 40:
+            q = 100 - 10 * count_kill
+        else:
+            q = 40
+        if count > q:
             load_robot()
             count = 0
         else:
