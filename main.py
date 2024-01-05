@@ -140,7 +140,8 @@ class Robot(pygame.sprite.Sprite):
         global in_game
         global verx
         global vniz
-        self.rect.x += 3
+        global count_kill
+        self.rect.x += 1 + count_kill
         if self.rect.x > 900 or pygame.sprite.collide_mask(self, oxot):
             in_game = False
             self.kill()
