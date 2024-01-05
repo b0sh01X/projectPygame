@@ -154,6 +154,9 @@ count = 0
 kd_pulya = 70
 count_kill = 0
 
+icon = load_image('icon.png')
+pygame.display.set_icon(icon)
+
 group = pygame.sprite.Group()
 fon = pygame.sprite.Group()
 zastav = pygame.sprite.Group()
