@@ -28,11 +28,11 @@ def restart():
     kd_pulya = 25
     count_kill = 0
     count = 0
+    kn.restartt()
 
 
 def load_image(name, colorkey=None):
     fullname = os.path.join('data', name)
-    # если файл не существует, то выходим
     if not os.path.isfile(fullname):
         print(f"Файл с изображением '{fullname}' не найден")
         sys.exit()
@@ -103,6 +103,9 @@ class Knopka(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = 450
         self.rect.y = 450
+
+    def restartt(self):
+        self.image = pygame.transform.scale(load_image('restart.png'), (100, 100))
 
 
 class Pulya(pygame.sprite.Sprite):
