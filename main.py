@@ -9,6 +9,8 @@ pygame.init()
 size = width, height = 1000, 600
 screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Охота на роботов")
+r, g, b = 0, 0, 0
+s_rgb = ['r', 'g', 'b']
 
 
 def countt():
@@ -19,10 +21,27 @@ def countt():
     screen.blit(text, (15, 10))
 
 
+def zast(num=False):
+    if num == False:
+        font = pygame.font.Font(None, 100)
+        text = font.render('Охота на роботов', True, (0, 0, 255))
+        text_x = width // 2 - text.get_width() // 2
+        text_y = height // 2 - text.get_height() // 2
+        screen.blit(text, (text_x, text_y))
+    elif num == True:
+        font = pygame.font.Font(None, 100)
+        text = font.render('Game over', True, (0, 0, 255))
+        text_x = width // 2 - text.get_width() // 2
+        text_y = height // 2 - text.get_height() // 2
+        screen.blit(text, (text_x, text_y))
+
+
 def restart():
     global kd_pulya
     global count
     global count_kill
+    global rs
+    rs = True
     for i in all_sprites:
         i.kill()
     kd_pulya = 25
@@ -169,6 +188,7 @@ all_sprites = pygame.sprite.Group()
 in_game = False
 verx = False
 vniz = False
+rs = False
 
 fon_game = Fon(fon, 1)
 zastavka = Fon(zastav, 2)
@@ -176,6 +196,7 @@ kn = Knopka(zastav)
 
 while running:
     zastav.draw(screen)
+    zast(rs)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
