@@ -24,16 +24,23 @@ def countt():
 def zast(num=False):
     if num == False:
         font = pygame.font.Font(None, 100)
-        text = font.render('Охота на роботов', True, (0, 0, 255))
+        text = font.render('Охота на роботов', True, (0, 255, 255))
         text_x = width // 2 - text.get_width() // 2
-        text_y = height // 2 - text.get_height() // 2
+        text_y = (height // 2 - text.get_height() // 2) - 150
         screen.blit(text, (text_x, text_y))
     elif num == True:
         font = pygame.font.Font(None, 100)
-        text = font.render('Game over', True, (0, 0, 255))
+        text = font.render('Игра окончена', True, (0, 255, 255))
         text_x = width // 2 - text.get_width() // 2
-        text_y = height // 2 - text.get_height() // 2
+        text_y = (height // 2 - text.get_height() // 2) - 150
+
+        font2 = pygame.font.Font(None, 50)
+        text2 = font2.render(f'Со счётом {count_kill1}', True, (0, 255, 255))
+        text2_x = (width // 2 - text.get_width() // 2) + 50
+        text2_y = (height // 2 - text.get_height() // 2) - 50
+
         screen.blit(text, (text_x, text_y))
+        screen.blit(text2, (text2_x, text2_y))
 
 
 def restart():
@@ -41,13 +48,15 @@ def restart():
     global count
     global count_kill
     global rs
+    global count_kill1
+    count_kill1 = count_kill
     rs = True
     for i in all_sprites:
         i.kill()
+    kn.restartt()
     kd_pulya = 25
     count_kill = 0
     count = 0
-    kn.restartt()
 
 
 def load_image(name, colorkey=None):
@@ -138,7 +147,7 @@ class Pulya(pygame.sprite.Sprite):
     
     def update(self):
         global count_kill
-        self.rect.x -= 5
+        self.rect.x -= 20
         if self.rect.x < 0:
             self.kill()
         for r in rabot:
@@ -175,6 +184,7 @@ running = True
 count = 0
 kd_pulya = 25
 count_kill = 0
+count_kill1 = 0
 
 icon = load_image('icon.png')
 pygame.display.set_icon(icon)
