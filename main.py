@@ -247,9 +247,9 @@ while running:
         else:
             count += 1
         if verx:
-            oxot.rect.y -= (1 + count_kill * 2)
+            oxot.rect.y -= (2 + count_kill * 2)
         if vniz:
-            oxot.rect.y += (1 + count_kill * 2)
+            oxot.rect.y += (2 + count_kill * 2)
         kd_pulya += 1
     pygame.display.flip()
     pygame.time.Clock().tick(50)
