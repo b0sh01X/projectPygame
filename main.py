@@ -11,6 +11,8 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Охота на роботов")
 r, g, b = 0, 0, 0
 s_rgb = ['r', 'g', 'b']
+pygame.mixer.music.load("data/music.mp3")
+pygame.mixer.music.play(-1)
 
 
 def countt():
@@ -57,6 +59,7 @@ def restart():
     kd_pulya = 25
     count_kill = 0
     count = 0
+    pygame.mixer.music.stop()
 
 
 def load_image(name, colorkey=None):
@@ -180,6 +183,8 @@ class Robot(pygame.sprite.Sprite):
             restart()
 
 
+pygame.mixer.music.stop()
+pygame.mixer.music.set_volume(100)
 running = True
 count = 0
 kd_pulya = 25
@@ -227,6 +232,8 @@ while running:
         if event.type == pygame.MOUSEBUTTONDOWN and kn.rect.collidepoint(event.pos):
             in_game = True
             screen.fill((0, 0, 0))
+            pygame.mixer.music.rewind()
+            pygame.mixer.music.play(-1)
             if not group:
                 oxot = Oxotnik(group)
     if in_game:
