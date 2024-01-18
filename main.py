@@ -230,12 +230,13 @@ while running:
                 if event.key == pygame.K_DOWN:
                     vniz = False
         if event.type == pygame.MOUSEBUTTONDOWN and kn.rect.collidepoint(event.pos):
-            in_game = True
-            screen.fill((0, 0, 0))
-            pygame.mixer.music.rewind()
-            pygame.mixer.music.play(-1)
-            if not group:
-                oxot = Oxotnik(group)
+            if not in_game:
+                in_game = True
+                screen.fill((0, 0, 0))
+                pygame.mixer.music.rewind()
+                pygame.mixer.music.play(-1)
+                if not group:
+                    oxot = Oxotnik(group)
     if in_game:
         fon.draw(screen)
         group.draw(screen)
@@ -254,9 +255,9 @@ while running:
         else:
             count += 1
         if verx:
-            oxot.rect.y -= (2 + count_kill * 2)
+            oxot.rect.y -= (2 + count_kill * 0.5)
         if vniz:
-            oxot.rect.y += (2 + count_kill * 2)
+            oxot.rect.y += (2 + count_kill * 0.5)
         kd_pulya += 1
     pygame.display.flip()
     pygame.time.Clock().tick(50)
